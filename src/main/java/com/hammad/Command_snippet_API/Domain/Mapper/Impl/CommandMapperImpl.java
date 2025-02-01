@@ -27,6 +27,7 @@ public class CommandMapperImpl implements CommandMapper {
                 command.getHowTo(),
                 command.getLine(),
                 command.getPlatform()
+
         );
     }
 }

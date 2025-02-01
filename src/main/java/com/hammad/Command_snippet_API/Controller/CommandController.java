@@ -2,24 +2,26 @@ package com.hammad.Command_snippet_API.Controller;
 
 
 import com.hammad.Command_snippet_API.Domain.Dto.CommandDto;
+import com.hammad.Command_snippet_API.Domain.Entity.Command;
 import com.hammad.Command_snippet_API.Domain.Mapper.CommandMapper;
 import com.hammad.Command_snippet_API.Domain.Service.CommandService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@RequestMapping(name = "/commands")
+@RequestMapping(path = "/commands")
 public class CommandController {
 
-    private final CommandMapper commandMapper;
-    private final CommandService commandService;
 
-    public CommandController(CommandMapper commandMapper, CommandService commandService) {
-        this.commandMapper = commandMapper;
+  private  final CommandService commandService;
+  private  final CommandMapper commandMapper;
+
+    public CommandController(CommandService commandService, CommandMapper commandMapper) {
         this.commandService = commandService;
+        this.commandMapper = commandMapper;
     }
 
 
@@ -28,5 +30,19 @@ public class CommandController {
         return commandService.getAllCommands().stream().map(commandMapper::toDto).toList();
     };
 
+
+    @PostMapping()
+    public  CommandDto createCommand(@RequestBody  CommandDto commandDto){
+
+        Command createdCommand = commandService.createCommand(commandMapper.fromDto(commandDto));
+        return commandMapper.toDto(createdCommand);
+
+    }
+
+    @GetMapping(path = "/{id}")
+    public Optional<CommandDto> getCommand(@PathVariable("id") UUID id){
+
+        return commandService.getCommand(id).map(commandMapper::toDto);
+    }
 
 }
