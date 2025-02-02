@@ -16,7 +16,8 @@ public class CommandMapperImpl implements CommandMapper {
                 commandDto.id(),
                 commandDto.howTo(),
                 commandDto.line(),
-                commandDto.platform(),null,null
+                commandDto.platform(),
+                null,null
         );
     }
 

@@ -17,13 +17,13 @@ public class Command {
     private UUID id;
 
     @Column(name = "howTo", columnDefinition = "TEXT")
-    private  String howTo;
+    private String howTo;
 
     @Column(name = "line")
     private String line;
 
     @Column(name = "platform")
-    private Platform platform;
+    private String platform;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -31,29 +31,16 @@ public class Command {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
     public Command() {
     }
 
-    public Command(UUID id, String howTo, String line, Platform platform, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Command(UUID id, String howTo, String line, String platform, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.howTo = howTo;
         this.line = line;
         this.platform = platform;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "CommanderEntity{" +
-                "id=" + id +
-                ", howTo='" + howTo + '\'' +
-                ", line='" + line + '\'' +
-                ", platform=" + platform +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 
     public UUID getId() {
@@ -80,11 +67,11 @@ public class Command {
         this.line = line;
     }
 
-    public Platform getPlatform() {
+    public String getPlatform() {
         return platform;
     }
 
-    public void setPlatform(Platform platform) {
+    public void setPlatform(String platform) {
         this.platform = platform;
     }
 
@@ -107,12 +94,26 @@ public class Command {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Command that = (Command) o;
-        return Objects.equals(id, that.id) && Objects.equals(howTo, that.howTo) && Objects.equals(line, that.line) && platform == that.platform && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        Command command = (Command) o;
+        return Objects.equals(id, command.id) && Objects.equals(howTo, command.howTo) && Objects.equals(line, command.line) && Objects.equals(platform, command.platform) && Objects.equals(createdAt, command.createdAt) && Objects.equals(updatedAt, command.updatedAt);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, howTo, line, platform, createdAt, updatedAt);
     }
+
+    @Override
+    public String toString() {
+        return "Command{" +
+                "id=" + id +
+                ", howTo='" + howTo + '\'' +
+                ", line='" + line + '\'' +
+                ", platform='" + platform + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
+
+

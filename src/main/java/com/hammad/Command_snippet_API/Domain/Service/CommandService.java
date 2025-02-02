@@ -13,4 +13,7 @@ public interface CommandService {
      List<Command> getAllCommands();
      Command createCommand(Command command);
      Optional<Command> getCommand(UUID id);
+     Command updateCommand(UUID commandId, Command command);
+     void deleteCommand(UUID id);
+
 }

@@ -45,4 +45,19 @@ public class CommandController {
         return commandService.getCommand(id).map(commandMapper::toDto);
     }
 
+    @DeleteMapping(path = "/{id}")
+    public void deleteCommand(@PathVariable("id") UUID id){
+       commandService.deleteCommand(id);
+    }
+
+    @PutMapping(path = "/{commandId}")
+    public CommandDto updateCommand(@PathVariable("commandId") UUID commandId ,@RequestBody CommandDto commandDto){
+      Command  commandToBeUpdated = commandService.updateCommand(commandId,
+
+              (commandMapper.fromDto(commandDto))
+              );
+      return commandMapper.toDto(commandToBeUpdated);
+
+    }
+
 }
