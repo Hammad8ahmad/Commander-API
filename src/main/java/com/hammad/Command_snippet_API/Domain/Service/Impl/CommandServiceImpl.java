@@ -1,8 +1,15 @@
 package com.hammad.Command_snippet_API.Domain.Service.Impl;
 
+import com.hammad.Command_snippet_API.Domain.Dto.CommandDto;
+import com.hammad.Command_snippet_API.Domain.Dto.CommandPageResponse;
 import com.hammad.Command_snippet_API.Domain.Entity.Command;
+import com.hammad.Command_snippet_API.Domain.Mapper.CommandMapper;
 import com.hammad.Command_snippet_API.Domain.Repository.CommandRepository;
 import com.hammad.Command_snippet_API.Domain.Service.CommandService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,21 +17,46 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
 public class CommandServiceImpl implements CommandService {
 
     private  final CommandRepository commandRepository;
+    private  final CommandMapper commandMapper;
 
-    public CommandServiceImpl(CommandRepository commandRepository){
+    public CommandServiceImpl(CommandRepository commandRepository,CommandMapper commandMapper){
         this.commandRepository = commandRepository;
+        this.commandMapper = commandMapper;
     }
+
 
     @Override
-    public List<Command> getAllCommands() {
-        return commandRepository.findAll();
+    public CommandPageResponse getAll(int page, int size, String sortBy, String sortDirection, String platform) {
+        // Ensure sorting is valid
+        Sort sort = sortDirection.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        // Create pageable request with sorting
+        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1), sort);
+
+        // Fetch paginated data with optional filtering
+        Page<Command> commandPage = (platform == null || platform.isEmpty())
+                ? commandRepository.findAll(pageable)  // No filter, get all
+                : commandRepository.findByPlatformContainingIgnoreCase(platform, pageable); // Filter by platform
+
+        // Convert entities to DTOs
+        List<CommandDto> commandDtos = commandPage.stream()
+                .map(commandMapper::toDto)
+                .toList();
+
+        // Return paginated response
+        return new CommandPageResponse(commandDtos, commandPage.getTotalPages(), commandPage.getTotalElements());
     }
+
+
 
     @Override
     public Command createCommand(Command command) {
