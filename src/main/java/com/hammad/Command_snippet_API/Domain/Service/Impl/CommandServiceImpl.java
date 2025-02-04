@@ -6,11 +6,14 @@ import com.hammad.Command_snippet_API.Domain.Entity.Command;
 import com.hammad.Command_snippet_API.Domain.Mapper.CommandMapper;
 import com.hammad.Command_snippet_API.Domain.Repository.CommandRepository;
 import com.hammad.Command_snippet_API.Domain.Service.CommandService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +36,7 @@ public class CommandServiceImpl implements CommandService {
 
 
     @Override
+    @Cacheable(value = "commands", key = "#page + '_' + #size + '_' + #sortBy + '_' + #sortDirection + '_' + (#platform != null ? #platform : 'ALL')")
     public CommandPageResponse getAll(int page, int size, String sortBy, String sortDirection, String platform) {
         // Ensure sorting is valid
         Sort sort = sortDirection.equalsIgnoreCase("desc")
@@ -51,7 +55,7 @@ public class CommandServiceImpl implements CommandService {
         List<CommandDto> commandDtos = commandPage.stream()
                 .map(commandMapper::toDto)
                 .toList();
-
+        System.out.println("Fetching data from database...");
         // Return paginated response
         return new CommandPageResponse(commandDtos, commandPage.getTotalPages(), commandPage.getTotalElements());
     }
@@ -59,6 +63,7 @@ public class CommandServiceImpl implements CommandService {
 
 
     @Override
+    @CacheEvict(value = "commands", allEntries = true) // Clears the first page
     public Command createCommand(Command command) {
         if (null != command.getId()) {
             throw new IllegalArgumentException("Command has already an id");
@@ -82,6 +87,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
+    @CacheEvict(value = "commands", allEntries = true)
     public Command updateCommand(UUID commandId, Command command) {
         if(null == command.getId()){
             throw  new IllegalArgumentException("Command must have an id");
@@ -92,7 +98,6 @@ public class CommandServiceImpl implements CommandService {
         Command existingCommand  = commandRepository.findById(commandId)
                 .orElseThrow(() -> new IllegalArgumentException("Command not found"));
 
-                existingCommand.setId(commandId);
                 existingCommand.setHowTo(command.getHowTo());
                 existingCommand.setLine(command.getLine());
                 existingCommand.setPlatform(command.getPlatform());
@@ -100,6 +105,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
+    @CacheEvict(value = "commands", allEntries = true)
     public void deleteCommand(UUID id) {
         commandRepository.deleteById(id);
     }

@@ -1,8 +1,12 @@
 package com.hammad.Command_snippet_API.Domain.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
 import java.util.UUID;
 
-public record CommandDto(
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record CommandDto (
 
         UUID id,
         String howTo,
@@ -10,5 +14,5 @@ public record CommandDto(
         String platform
 
 
-) {
+) implements Serializable {
 }
