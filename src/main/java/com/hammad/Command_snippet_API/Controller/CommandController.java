@@ -6,6 +6,8 @@ import com.hammad.Command_snippet_API.Domain.Dto.CommandPageResponse;
 import com.hammad.Command_snippet_API.Domain.Entity.Command;
 import com.hammad.Command_snippet_API.Domain.Mapper.CommandMapper;
 import com.hammad.Command_snippet_API.Domain.Service.CommandService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/commands")
+@Tag(name = "Commands API",description = "Create,Read,Update and Delete commands.")
 public class CommandController {
 
 
@@ -34,6 +37,12 @@ public class CommandController {
 //        return commandService.getAll(page,size)
 //                .map(commandMapper::toDto); // Convert each Command to CommandDto
 //    }
+
+
+    @Operation(
+            summary = "Get command by ID",
+            description = "Fetches a command by its ID. Caching is enabled, and subsequent requests for the same command will be faster due to Redis caching."
+    )
     @GetMapping()
     public CommandPageResponse getAllCommandsPaged(
             @RequestParam(defaultValue = "0") int page,

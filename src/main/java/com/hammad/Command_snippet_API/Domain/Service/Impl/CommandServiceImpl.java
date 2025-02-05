@@ -6,6 +6,7 @@ import com.hammad.Command_snippet_API.Domain.Entity.Command;
 import com.hammad.Command_snippet_API.Domain.Mapper.CommandMapper;
 import com.hammad.Command_snippet_API.Domain.Repository.CommandRepository;
 import com.hammad.Command_snippet_API.Domain.Service.CommandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Service
