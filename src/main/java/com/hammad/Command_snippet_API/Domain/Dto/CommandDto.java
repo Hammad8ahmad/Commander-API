@@ -7,6 +7,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
+// Dto for command entity
 
 public record CommandDto (
 
@@ -17,6 +18,4 @@ public record CommandDto (
 
 
 ) implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
 }

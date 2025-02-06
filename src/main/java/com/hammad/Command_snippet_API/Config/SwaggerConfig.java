@@ -4,7 +4,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.swagger.v3.oas.models.info.Info;
-//import org.springdoc.core.models.OpenAPI;
+
+
+// Swagger config file where you can configure different properties
 
 @Configuration
 public class SwaggerConfig {

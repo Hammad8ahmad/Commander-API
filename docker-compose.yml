@@ -14,8 +14,59 @@
 #    volumes:
 #      - postgres_data:/var/lib/postgresql/data
 #
+#  redis:
+#    image: redis:latest
+#    container_name: cli-snippet-cache
+#    restart: always
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - redis_data:/data
+#    command: ["redis-server", "--appendonly", "yes"]  # Enables Redis persistence (optional)
+#
 #volumes:
 #  postgres_data:
+#  redis_data:
+#
+#version: '3.8'
+#
+#services:
+#  postgres:
+#    image: postgres:latest
+#    container_name: cli-snippet-db
+#    restart: always
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: hammad
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#
+#  redis:
+#    image: redis:latest
+#    container_name: cli-snippet-cache
+#    restart: always
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - redis_data:/data
+#    command: ["redis-server", "--appendonly", "yes"]
+#
+#  command-snippet-api:
+#    image: command-snippet-api:latest
+#    build: .
+#    container_name: cli-snippet-api
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres
+#      - redis
+#
+#volumes:
+#  postgres_data:
+#  redis_data:
 version: '3.8'
 
 services:
@@ -40,7 +91,22 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    command: ["redis-server", "--appendonly", "yes"] # Enables Redis persistence (optional)
+    command: ["redis-server", "--appendonly", "yes"]
+
+  springboot:
+    build: .
+    container_name: command-snippet-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: hammad
+      SPRING_REDIS_HOST: redis
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   postgres_data:

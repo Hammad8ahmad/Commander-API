@@ -6,7 +6,6 @@ import com.hammad.Command_snippet_API.Domain.Entity.Command;
 import com.hammad.Command_snippet_API.Domain.Mapper.CommandMapper;
 import com.hammad.Command_snippet_API.Domain.Repository.CommandRepository;
 import com.hammad.Command_snippet_API.Domain.Service.CommandService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +27,7 @@ public class CommandServiceImpl implements CommandService {
 
     private  final CommandRepository commandRepository;
     private  final CommandMapper commandMapper;
+    private static final List<String> ALLOWED_SORT_FIELDS = List.of("howTo", "line","platform");
 
     public CommandServiceImpl(CommandRepository commandRepository,CommandMapper commandMapper){
         this.commandRepository = commandRepository;
@@ -39,6 +39,9 @@ public class CommandServiceImpl implements CommandService {
     @Cacheable(value = "commands", key = "#page + '_' + #size + '_' + #sortBy + '_' + #sortDirection + '_' + (#platform != null ? #platform : 'ALL')")
     public CommandPageResponse getAll(int page, int size, String sortBy, String sortDirection, String platform) {
         // Ensure sorting is valid
+        if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
+            throw new IllegalArgumentException("Invalid sort field: " + sortBy);
+        }
         Sort sort = sortDirection.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
@@ -88,14 +91,14 @@ public class CommandServiceImpl implements CommandService {
 
     @Override
     @CacheEvict(value = "commands", allEntries = true)
-    public Command updateCommand(UUID commandId, Command command) {
+    public Command updateCommand(UUID id, Command command) {
         if(null == command.getId()){
             throw  new IllegalArgumentException("Command must have an id");
         }
-        if(!Objects.equals(command.getId(),commandId)){
+        if(!Objects.equals(command.getId(),id)){
             throw  new IllegalArgumentException("Attempting to change command id this is not permitted");
         }
-        Command existingCommand  = commandRepository.findById(commandId)
+        Command existingCommand  = commandRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Command not found"));
 
                 existingCommand.setHowTo(command.getHowTo());

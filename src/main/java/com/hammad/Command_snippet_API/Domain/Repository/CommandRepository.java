@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/* Repository instance it extends Jpa repository that gives basic crud methods
+   it also has a method that filters by platform
+ */
+
 @Repository
 public interface CommandRepository extends JpaRepository<Command, UUID>, JpaSpecificationExecutor<Command> {
 

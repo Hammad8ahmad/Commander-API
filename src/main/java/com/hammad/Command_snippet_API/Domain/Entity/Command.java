@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+// Command entity it will create the table named commands with these fields in the db
+
+
 @Entity
 @Table(name = "Commands")
 public class Command {
