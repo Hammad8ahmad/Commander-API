@@ -1,5 +1,6 @@
 package com.hammad.Command_snippet_API.Domain.Service.Impl;
 
+import ch.qos.logback.classic.Logger;
 import com.hammad.Command_snippet_API.Domain.Dto.CommandDto;
 import com.hammad.Command_snippet_API.Domain.Dto.CommandPageResponse;
 import com.hammad.Command_snippet_API.Domain.Entity.Command;
@@ -75,6 +76,7 @@ public class CommandServiceImpl implements CommandService {
             throw new IllegalArgumentException("Command should have a value");
         }
         LocalDateTime now = LocalDateTime.now();
+
         return commandRepository.save(new Command(
                 null,
                 command.getHowTo(),

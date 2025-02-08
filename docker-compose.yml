@@ -1,17 +1,16 @@
-version: '3.8'
 services:
   postgres-container:
-    image: postgres:16
+    image: postgres:latest
     container_name: postgres-container
     restart: always
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: hammad
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     networks:
-      - my-network
+      - command-snippet-api_my-network
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -19,25 +18,30 @@ services:
     image: redis:latest
     container_name: redis-container
     restart: always
+    environment:
+       REDIS_HOST: ${REDIS_HOST}
+       REDIS_PORT: ${REDIS_PORT}
     ports:
       - "6379:6379"
     networks:
-      - my-network
+      - command-snippet-api_my-network
 
-  springboot-app:
-    image: my-springboot-app
-    container_name: springboot-app
-    restart: always
-    depends_on:
-      - postgres-container
-      - redis-container
-    ports:
-      - "8080:8080"
-    networks:
-      - my-network
+#  springboot-app:
+#    image: my-springboot-app
+#    container_name: springboot-app
+#    restart: always
+#    depends_on:
+#      - postgres-container
+#      - redis-container
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - command-snippet-api_my-network
 
 networks:
-  my-network:
+  command-snippet-api_my-network:
 
 volumes:
   postgres-data:
