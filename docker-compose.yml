@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
@@ -26,19 +26,19 @@ services:
     networks:
       - command-snippet-api_my-network
 
-#  springboot-app:
-#    image: my-springboot-app
-#    container_name: springboot-app
-#    restart: always
-#    depends_on:
-#      - postgres-container
-#      - redis-container
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=prod
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - command-snippet-api_my-network
+  springboot-app:
+    image: my-springboot-app
+    container_name: springboot-app
+    restart: always
+    depends_on:
+      - postgres-container
+      - redis-container
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+    networks:
+      - command-snippet-api_my-network
 
 networks:
   command-snippet-api_my-network:
