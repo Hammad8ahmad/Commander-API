@@ -34,6 +34,8 @@ public class Command {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // Getters,setters,hashcode,constructors and tostring for the command entity
+
     public Command() {
     }
 

@@ -35,6 +35,7 @@ public class CommandServiceImpl implements CommandService {
         this.commandMapper = commandMapper;
     }
 
+//    Get all paginated commands it handles sorting,filtering and caching too
 
     @Override
     @Cacheable(value = "commands", key = "#page + '_' + #size + '_' + #sortBy + '_' + #sortDirection + '_' + (#platform != null ? #platform : 'ALL')")
@@ -65,7 +66,7 @@ public class CommandServiceImpl implements CommandService {
     }
 
 
-
+//    Create commands service
     @Override
     @CacheEvict(value = "commands", allEntries = true) // Clears the first page
     public Command createCommand(Command command) {
@@ -85,12 +86,12 @@ public class CommandServiceImpl implements CommandService {
                 now, now
         ));
     }
-
+// Get a single command by id
     @Override
     public Optional<Command> getCommand(UUID id) {
         return commandRepository.findById(id);
     }
-
+//  Update an existing command by id
     @Override
     @CacheEvict(value = "commands", allEntries = true)
     public Command updateCommand(UUID id, Command command) {
@@ -108,6 +109,8 @@ public class CommandServiceImpl implements CommandService {
                 existingCommand.setPlatform(command.getPlatform());
                 return commandRepository.save(existingCommand);
     }
+
+//    Delete a command by id
 
     @Override
     @CacheEvict(value = "commands", allEntries = true)
