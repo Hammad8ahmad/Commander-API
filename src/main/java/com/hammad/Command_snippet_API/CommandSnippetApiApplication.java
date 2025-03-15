@@ -5,15 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
+// Entry point
 
 @SpringBootApplication
 @EnableCaching
 public class CommandSnippetApiApplication {
 
 	public static void main(String[] args) {
-
-
-
 
 		SpringApplication.run(CommandSnippetApiApplication.class, args);
 	}

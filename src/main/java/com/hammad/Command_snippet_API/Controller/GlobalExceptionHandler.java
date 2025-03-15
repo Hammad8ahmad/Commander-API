@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-//  Error handling particularly IllegalArgumentException
+//  Global Error handling particularly IllegalArgumentException
 
 
     @ExceptionHandler(IllegalArgumentException.class)
