@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
+// Rest Controller / Command Controller
+
 @RestController
 @RequestMapping(path = "/commands")
 @Tag(name = "Commands API",description = "Create,Read,Update and Delete commands.")
@@ -43,7 +45,7 @@ public class CommandController {
 
     }
 
-
+    // Get all commands
     @Operation(
             summary = "Get all commands",
             description = "Fetches all commands.Pagination and Caching is enabled,So by default if you dont specify the page and size it would show first 10 commands from page 0 and subsequent requests for the same command will be faster due to Redis caching."
