@@ -1,0 +1,30 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master  # Change this if your default branch is different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_DEPLOY_KEY }}" > ~/.ssh/ec2-deploy-key
+          chmod 600 ~/.ssh/ec2-deploy-key
+          ssh-keyscan -H your-ec2-ip >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i ~/.ssh/ec2-deploy-key ubuntu@your-ec2-ip << 'EOF'
+            cd ~/Commander-API
+            git pull origin master
+            docker compose down
+            docker compose up -d --build
+          EOF
