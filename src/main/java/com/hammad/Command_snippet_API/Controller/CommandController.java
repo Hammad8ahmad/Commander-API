@@ -30,7 +30,6 @@ public class CommandController {
         this.commandMapper = commandMapper;
     }
 
-
     // Post commands in the database
     @Operation(
             summary = "Post a command",
