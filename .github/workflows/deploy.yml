@@ -16,13 +16,14 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_DEPLOY_KEY }}" > ~/.ssh/ec2-deploy-key
-          chmod 600 ~/.ssh/ec2-deploy-key
-          ssh-keyscan -H 65.1.147.2 >> ~/.ssh/known_hosts
+          echo "${{ secrets.EC2_DEPLOY_KEY }}" | base64 --decode > ~/.ssh/ec2-deploy-key.pem
+          chmod 600 ~/.ssh/ec2-deploy-key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/ec2-deploy-key ubuntu@65.1.147.2 << 'EOF'
+          ssh -i ~/.ssh/ec2-deploy-key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            set -e  # Stop script on error
             cd ~/Commander-API
             git pull origin master
             docker compose down
