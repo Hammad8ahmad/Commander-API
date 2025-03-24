@@ -22,7 +22,6 @@ import java.util.UUID;
 @Tag(name = "Commands API",description = "Create,Read,Update and Delete commands.")
 public class CommandController {
 
-
   private  final CommandService commandService;
   private  final CommandMapper commandMapper;
 
