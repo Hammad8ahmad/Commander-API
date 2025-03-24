@@ -13,7 +13,6 @@ public class GlobalExceptionHandler {
 
 //  Global Error handling particularly IllegalArgumentException
 
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleExceptions(RuntimeException ex , WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse(
