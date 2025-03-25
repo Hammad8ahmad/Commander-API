@@ -13,15 +13,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          printf "%s\n" "${{ secrets.EC2_DEPLOY_KEY }}" | sed 's/\r//g' > ~/.ssh/commander-key.pem
-          chmod 600 ~/.ssh/commander-key.pem
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/commander-key.pem
-
       - name: Debug SSH Key
         run: |
           echo "🔍 Checking Key Format..."
