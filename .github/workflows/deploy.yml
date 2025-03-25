@@ -15,27 +15,10 @@ jobs:
 
       - name: Set up SSH
         run: |
-          echo "🔍 Creating .ssh directory..."
           mkdir -p ~/.ssh
-
-          echo "🔍 Writing SSH key..."
           echo "${{ secrets.EC2_DEPLOY_KEY }}" | sed 's/\r//g' > ~/.ssh/commander-key.pem
-
-          echo "🔍 Checking key file existence..."
-          ls -l ~/.ssh
-          cat ~/.ssh/commander-key.pem | head -n 5  # Print first 5 lines to check if key is stored
-
-          echo "🔍 Setting permissions..."
-          chmod 600 ~/.ssh/commander-key.pem || { echo "❌ Failed to set permissions"; exit 1; }
-
-          echo "🔍 Checking key file type..."
-          file ~/.ssh/commander-key.pem || { echo "❌ SSH key file is invalid"; exit 1; }
-
-          echo "🔍 Adding EC2 host to known_hosts..."
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts || { echo "❌ ssh-keyscan failed"; exit 1; }
-
-          echo "✅ SSH setup complete."
-
+          chmod 600 ~/.ssh/commander-key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
