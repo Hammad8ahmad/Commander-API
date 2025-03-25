@@ -13,23 +13,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Debug SSH Key Storage
+      - name: Set up SSH
         run: |
-          echo "🔍 Creating .ssh directory..."
           mkdir -p ~/.ssh
-          
-          echo "🔍 Checking if .ssh directory exists..."
-          ls -ld ~/.ssh || echo "❌ ~/.ssh directory not found!"
-          
-          echo "🔍 Writing SSH key..."
           echo "${{ secrets.EC2_DEPLOY_KEY }}" | sed 's/\r//g' > ~/.ssh/commander-key.pem
           chmod 600 ~/.ssh/commander-key.pem
-          
-          echo "🔍 Checking Key Format..."
-          ls -l ~/.ssh
-          file ~/.ssh/commander-key.pem
-          cat -A ~/.ssh/commander-key.pem | head -n 10
-        shell: /usr/bin/bash -e {0}
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/commander-key.pem
 
       - name: Deploy to EC2
         run: |
