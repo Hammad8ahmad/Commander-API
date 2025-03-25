@@ -16,8 +16,8 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_DEPLOY_KEY }}" > ~/.ssh/ec2-deploy-key.pem
-          chmod 600 ~/.ssh/ec2-deploy-key.pem
+          echo "${{ secrets.EC2_DEPLOY_KEY }}" > ~/.ssh/commander-key.pem
+          chmod 600 ~/.ssh/commander-key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
