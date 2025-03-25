@@ -20,17 +20,23 @@ jobs:
           chmod 600 ~/.ssh/commander-key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Add user to Docker group
-        run: |
-          sudo usermod -aG docker $USER
-          newgrp docker
-
       - name: Deploy to EC2
         run: |
           ssh -i ~/.ssh/commander-key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
             set -e  # Stop script on error
+
+            echo "🔹 Fixing Docker permissions on EC2..."
+            sudo usermod -aG docker ubuntu
+            sudo chmod 666 /var/run/docker.sock  # Temporary fix (remove in production)
+            newgrp docker
+
+            echo "🚀 Pulling latest changes..."
             cd ~/Commander-API
             git pull origin master
+
+            echo "🔄 Restarting Docker containers..."
             docker compose down
             docker compose up -d --build
+
+            echo "✅ Deployment successful!"
           EOF
