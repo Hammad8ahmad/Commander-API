@@ -20,6 +20,11 @@ jobs:
           chmod 600 ~/.ssh/commander-key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Add user to Docker group
+        run: |
+          sudo usermod -aG docker $USER
+          newgrp docker
+
       - name: Deploy to EC2
         run: |
           ssh -i ~/.ssh/commander-key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
