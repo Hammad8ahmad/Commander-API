@@ -24,7 +24,9 @@ jobs:
 
       - name: Debug SSH Key
         run: |
+          echo "🔍 Checking Key Format..."
           ls -l ~/.ssh
+          file ~/.ssh/commander-key.pem
           cat -A ~/.ssh/commander-key.pem | head -n 10
 
       - name: Deploy to EC2
