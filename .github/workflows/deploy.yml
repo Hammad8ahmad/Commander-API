@@ -1,0 +1,49 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_DEPLOY_KEY }}" | sed 's/\r//g' > ~/.ssh/commander-key.pem
+          chmod 600 ~/.ssh/commander-key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build Spring Boot JAR
+        run: ./mvnw clean package -DskipTests
+
+      - name: Copy JAR to EC2
+        run: |
+          scp -i ~/.ssh/commander-key.pem -o StrictHostKeyChecking=no \
+            target/Command-snippet-API-0.0.1-SNAPSHOT.jar \
+            ubuntu@${{ secrets.EC2_HOST }}:~/Commander-API/target/
+
+      - name: Deploy on EC2
+        run: |
+          ssh -i ~/.ssh/commander-key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            set -e
+            cd ~/Commander-API
+            git pull origin master
+
+            echo "🛠️ Rebuilding containers..."
+            docker compose down
+            docker compose up -d --build
+            echo "✅ Done!"
+          EOF
