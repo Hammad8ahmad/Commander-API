@@ -31,7 +31,7 @@ jobs:
 
       - name: Copy JAR to EC2
         run: |
-          scp -i ~/.ssh/commander-key.pem -o StrictHostKeyChecking=no \
+          scp -i ~/.ssh/commander-backend-app.pem -o StrictHostKeyChecking=no \
             target/Command-snippet-API-0.0.1-SNAPSHOT.jar \
             ubuntu@${{ secrets.EC2_HOST }}:~/Commander-API/target/
 
