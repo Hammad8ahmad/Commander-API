@@ -48,3 +48,13 @@ networks:
 
 volumes:
   postgres-data:
+
+
+# HAVE TO CCHANGE THIS springboot-app:
+#  build:
+#    context: .
+#    dockerfile: Dockerfile
+#  container_name: springboot-app
+#  restart: always
+
+# also need to change url to 5432
