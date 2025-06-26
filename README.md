@@ -2,7 +2,7 @@
 
 A RESTful API that stores and retrieves command-line snippets with descriptions and target platforms — useful for quickly looking up commands you often forget.
 
-This backend-only project is inspired by the need for a lightweight, fast API to organize shell commands by platform (Linux, Git, etc.).
+This backend-only project is inspired by the need for a lightweight, fast API to organize shell commands by platform (Linux, Git, etc.). 
 
 ##  Live Demo
 
