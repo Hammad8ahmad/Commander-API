@@ -7,7 +7,7 @@ This backend-only project is inspired by the need for a lightweight, fast API to
 ##  Live Demo
 
  Swagger(Hosted on AWS EC2 with HTTPS enabled):
- ![Swagger UI](https://commander-api.duckdns.org/swagger-ui/index.html)  
+ [Swagger](https://commander-api.duckdns.org/swagger-ui/index.html)  
   
 ## Screenshots
 
