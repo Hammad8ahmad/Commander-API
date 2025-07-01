@@ -21,7 +21,6 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .servers(List.of(new Server().url("https://commander-api.duckdns.org")))
                 .info(new Info().title("Commander API")
                         .version("1.0")
                         .description("API documentation for managing command-line snippets."));
