@@ -20,10 +20,14 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
+        Server server = new Server();
+        server.setUrl("https://commander-api.duckdns.org");
+        server.setDescription("Production server");
+
         return new OpenAPI()
                 .info(new Info().title("Commander API")
                         .version("1.0")
-                        .description("API documentation for managing command-line snippets."));
+                        .description("API documentation for managing command-line snippets."))
+                .servers(List.of(server)); // ✅ Explicit override only!
+    }}
 
-    }
-}
